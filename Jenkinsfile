@@ -7,13 +7,13 @@ pipeline {
       stage('Build Artifact') {
             steps {
               parallel(
-               invoiceServiceBuild: {
+               "invoiceServiceBuild": {
                   dir('invoice/') {
                     sh 'chmod +x gradlew'
                     sh "./gradlew -Pprod clean bootJar"
                   }
                },
-               notificationBuild: {
+               "notificationBuild": {
                   dir('notification') {
                     sh 'chmod +x gradlew'
                     sh "./gradlew -Pprod clean bootJar"
@@ -25,12 +25,12 @@ pipeline {
       stage('Unit test') {
             steps {
               parallel(
-                invoicetest: {
+                "invoicetest": {
                   dir('invoice/') {
                     sh "./gradlew test integrationTest jacocoTestReport"
                   }
                 },
-                notificationtest: {
+                "notificationtest": {
                   dir('notification/') {
                     sh "./gradlew test integrationTest jacocoTestReport"
                   }
@@ -42,12 +42,12 @@ pipeline {
           steps {
             parallel(
                 withSonarQubeEnv('sonar-server2') {
-                    invoiceSAST: {
+                    "invoiceSAST": {
                       dir('invoice/') {
                          sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
                       }
                     },
-                    notificationSAST: {
+                    "notificationSAST": {
                       dir('notification/') {
                          sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
                       }
