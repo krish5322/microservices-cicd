@@ -7,15 +7,16 @@ pipeline {
       stage('Build Artifact') {
             steps {
               dir('invoice/') {
-                sh "sudo ./gradlew -Pprod clean bootJar"
-                sh 'sudo java -jar build/libs/*.jar'
+                sh 'chmod +x gradlew'
+                sh "./gradlew -Pprod clean bootJar"
+                sh 'java -jar build/libs/*.jar'
               }
             }
       }
       stage('Unit test') {
             steps {
               dir('invoice/') {
-                sh "sudo ./gradlew test integrationTest jacocoTestReport"
+                sh "./gradlew test integrationTest jacocoTestReport"
               }
             }
 
@@ -24,7 +25,7 @@ pipeline {
           steps {
                 withSonarQubeEnv('sonar-server2') {
                   dir('invoice/') {
-                     sh 'sudo ./gradlew -Pprod clean check jacocoTestReport sonarqube'
+                     sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
                   }
                 }
           }
