@@ -38,24 +38,7 @@ pipeline {
               )
             }
       }
-      stage('SonarQube -SAST') {
-          steps {
-            parallel(
-                withSonarQubeEnv('sonar-server2') {
-                    "invoiceSAST": {
-                      dir('invoice/') {
-                         sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
-                      }
-                    },
-                    "notificationSAST": {
-                      dir('notification/') {
-                         sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
-                      }
-                    }
-                }
-            )
-          }
-      }
+
   }
 }
 
