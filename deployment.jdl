@@ -1,0 +1,16 @@
+/**
+ * Deployments
+ */
+
+// will be created under 'kubernetes' folder
+deployment {
+  deploymentType kubernetes
+  appsFolders [store, invoice, notification, product]
+  dockerRepositoryName "deepu105"
+  serviceDiscoveryType no
+  istio true
+  kubernetesServiceType Ingress
+  kubernetesNamespace jhipster
+  ingressDomain "34.76.233.160.nip.io"
+  ingressType gke
+}
