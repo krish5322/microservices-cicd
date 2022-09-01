@@ -2,9 +2,6 @@ pipeline {
   agent {
       label 'azure'
   }
-  environment{
-        VERSION = "${env.BUILD_ID}"
-  }
 
   stages {
     dir('invoice/') {
