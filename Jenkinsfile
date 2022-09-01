@@ -6,26 +6,53 @@ pipeline {
   stages {
       stage('Build Artifact') {
             steps {
-              dir('invoice/') {
-                sh 'chmod +x gradlew'
-                sh "./gradlew -Pprod clean bootJar"
-              }
+              parallel(
+               invoiceServiceBuild: {
+                  dir('invoice/') {
+                    sh 'chmod +x gradlew'
+                    sh "./gradlew -Pprod clean bootJar"
+                  }
+               },
+               notificationBuild: {
+                  dir('notification') {
+                    sh 'chmod +x gradlew'
+                    sh "./gradlew -Pprod clean bootJar"
+                  }
+               }
+              )
             }
       }
       stage('Unit test') {
             steps {
-              dir('invoice/') {
-                sh "./gradlew test integrationTest jacocoTestReport"
-              }
+              parallel(
+                invoicetest: {
+                  dir('invoice/') {
+                    sh "./gradlew test integrationTest jacocoTestReport"
+                  }
+                },
+                notificationtest: {
+                  dir('notification/') {
+                    sh "./gradlew test integrationTest jacocoTestReport"
+                  }
+                }
+              )
             }
-
       }
       stage('SonarQube -SAST') {
           steps {
                 withSonarQubeEnv('sonar-server2') {
-                  dir('invoice/') {
-                     sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
-                  }
+                  parallel(
+                    invoiceSAST: {
+                      dir('invoice/') {
+                         sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
+                      }
+                    },
+                    notificationSAST: {
+                      dir('notification/') {
+                         sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
+                      }
+                    }
+                  )
                 }
           }
       }
