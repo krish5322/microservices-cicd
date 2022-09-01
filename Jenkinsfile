@@ -9,7 +9,6 @@ pipeline {
               dir('invoice/') {
                 sh 'chmod +x gradlew'
                 sh "./gradlew -Pprod clean bootJar"
-                sh 'java -jar build/libs/*.jar'
               }
             }
       }
