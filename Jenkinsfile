@@ -39,8 +39,8 @@ pipeline {
             }
       }
       stage('SonarQube -SAST') {
-        withSonarQubeEnv('sonar-server2') {
           steps {
+            withSonarQubeEnv('sonar-server2') {
               parallel(
                     "invoiceSAST": {
                       dir('invoice/') {
@@ -53,6 +53,7 @@ pipeline {
                       }
                     }
               )
+            }
           }
         }
       }
