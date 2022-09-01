@@ -39,9 +39,9 @@ pipeline {
             }
       }
       stage('SonarQube -SAST') {
+        withSonarQubeEnv('sonar-server2') {
           steps {
-            parallel(
-                withSonarQubeEnv('sonar-server2') {
+              parallel(
                     "invoiceSAST": {
                       dir('invoice/') {
                          sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
@@ -52,9 +52,9 @@ pipeline {
                          sh './gradlew -Pprod clean check jacocoTestReport sonarqube'
                       }
                     }
-                }
-            )
+              )
           }
+        }
       }
   }
 }
