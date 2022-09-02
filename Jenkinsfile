@@ -7,41 +7,18 @@ pipeline {
   }
 
   stages {
-      stage('Build and Push Docker Image') {
-           steps {
-             script{
-               withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_secret')]) {
-                 dir('store/') {
-                   sh '''
-                   chmod +x gradlew
-                   docker login -u bill3213 -p $docker_secret
-                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/store
-                   '''
-                 }
-                 dir('invoice/') {
-                   sh '''
-                   chmod +x gradlew
-                   docker login -u bill3213 -p $docker_secret
-                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/invoice
-                   '''
-                 }
-                 dir('notification/') {
-                   sh '''
-                   chmod +x gradlew
-                   docker login -u bill3213 -p $docker_secret
-                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/notification
-                   '''
-                 }
-                 dir('product/') {
-                   sh '''
-                   chmod +x gradlew
-                   docker login -u bill3213 -p $docker_secret
-                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/product
-                   '''
-                 }
-               }
-             }
-           }
+      stage('vulnerability Scan - Docker') {
+        steps {
+          parallel(
+            "Trivy Scan": {
+                sh "docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.31.3  image eclipse-temurin:11-jre-focal"
+            },
+            "OPA Conftest": {
+              dir('store/gradle/')
+                sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego docker.gradle'
+            }
+          )
+        }
       }
   }
 }

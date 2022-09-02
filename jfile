@@ -94,6 +94,42 @@ pipeline {
               )
           }
       }
+      stage('Build and Push Docker Image') {
+           steps {
+             script{
+               withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_secret')]) {
+                 dir('store/') {
+                   sh '''
+                   chmod +x gradlew
+                   docker login -u bill3213 -p $docker_secret
+                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/store
+                   '''
+                 }
+                 dir('invoice/') {
+                   sh '''
+                   chmod +x gradlew
+                   docker login -u bill3213 -p $docker_secret
+                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/invoice
+                   '''
+                 }
+                 dir('notification/') {
+                   sh '''
+                   chmod +x gradlew
+                   docker login -u bill3213 -p $docker_secret
+                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/notification
+                   '''
+                 }
+                 dir('product/') {
+                   sh '''
+                   chmod +x gradlew
+                   docker login -u bill3213 -p $docker_secret
+                   ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/product
+                   '''
+                 }
+               }
+             }
+           }
+      }
   }
 
 }
