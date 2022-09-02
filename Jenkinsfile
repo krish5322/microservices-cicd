@@ -6,9 +6,14 @@ pipeline {
   stages {
       stage('Build Artifact') {
            steps {
-             dir('store/') {
-               sh 'chmod +x gradlew'
-               sh './gradlew bootJar -Pprod jib -Djib.to.image=deepu105/store'
+             script{
+               withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_secret')]) {
+                 dir('store/') {
+                   sh 'chmod +x gradlew'
+                   sh 'docker login -u bill3213 -p $docker_secret'
+                   sh './gradlew bootJar -Pprod jib -Djib.to.image=deepu105/store'
+                 }
+               }
              }
            }
       }
