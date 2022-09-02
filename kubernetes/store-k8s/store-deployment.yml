@@ -74,13 +74,6 @@ spec:
               value: " -Xmx256m -Xms256m"
             - name: SERVER_SHUTDOWN
               value: graceful
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "500m"
-            limits:
-              memory: "1Gi"
-              cpu: "1"
           ports:
             - name: http
               containerPort: 8080
