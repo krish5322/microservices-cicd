@@ -94,6 +94,11 @@ pipeline {
               )
           }
       }
+      stage('vulnerability Scan with Trivy - Docker') {
+        steps {
+          sh "docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.31.3  image eclipse-temurin:11-jre-focal"
+        }
+      }
       stage('Build and Push Docker Image') {
            steps {
              script{

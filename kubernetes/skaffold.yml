@@ -2,16 +2,16 @@ apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
-    - image: deepu105/store
+    - image: bill3213/store
       context: ../store
       jib: {}
-    - image: deepu105/invoice
+    - image: bill3213/invoice
       context: ../invoice
       jib: {}
-    - image: deepu105/notification
+    - image: bill3213/notification
       context: ../notification
       jib: {}
-    - image: deepu105/product
+    - image: bill3213/product
       context: ../product
       jib: {}
   tagPolicy:
