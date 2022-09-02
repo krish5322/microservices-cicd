@@ -15,7 +15,6 @@ pipeline {
                    sh 'chmod +x gradlew'
                    sh 'docker login -u bill3213 -p $docker_secret'
                    sh './gradlew bootJar -Pprod jib -Djib.to.image=bill3213/microservices-cicd:${VERSION}'
-                   sh 'docker rmi bill3213/microservices-cicd:${VERSION}'
                  }
                }
              }
