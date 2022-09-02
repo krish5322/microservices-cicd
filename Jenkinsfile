@@ -52,7 +52,7 @@ pipeline {
                     sh "./gradlew test integrationTest jacocoTestReport"
                   }
                 },
-                "product-Service-test": {
+                "Store-Service-test": {
                   dir('store/') {
                     sh "./gradlew test integrationTest jacocoTestReport"
                   }
