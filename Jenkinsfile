@@ -14,8 +14,9 @@ pipeline {
                 sh "docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy:0.31.3  image eclipse-temurin:11-jre-focal"
             },
             "OPA Conftest": {
-              dir('store/gradle/')
+              dir('store/gradle/') {
                 sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego docker.gradle'
+              }
             }
           )
         }
