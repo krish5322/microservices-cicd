@@ -6,8 +6,10 @@ pipeline {
   stages {
       stage('Build Artifact') {
            steps {
-             sh 'chmod +x gradlew'
-             sh 'cd store && ./gradlew bootJar -Pprod jib -Djib.to.image=deepu105/store'
+             dir('store/') {
+               sh 'chmod +x gradlew'
+               sh './gradlew bootJar -Pprod jib -Djib.to.image=deepu105/store'
+             }
            }
       }
   }
