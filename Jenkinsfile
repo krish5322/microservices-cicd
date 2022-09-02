@@ -7,9 +7,11 @@ pipeline {
   }
 
   stages {
-    steps{
-      dir('kubernetes/') {
-         sh './kubectl-apply.sh -f'
+    stage('Kubernetes deployment - Dev') {
+      steps{
+        dir('kubernetes/') {
+           sh './kubectl-apply.sh -f'
+        }
       }
     }
   }
