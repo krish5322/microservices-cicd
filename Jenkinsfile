@@ -18,12 +18,6 @@ pipeline {
                    ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/store
                    '''
                  }
-               }
-             }
-           }
-           steps {
-             script{
-               withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_secret')]) {
                  dir('invoice/') {
                    sh '''
                    chmod +x gradlew
@@ -31,12 +25,6 @@ pipeline {
                    ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/invoice
                    '''
                  }
-               }
-             }
-           }
-           steps {
-             script{
-               withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_secret')]) {
                  dir('notification/') {
                    sh '''
                    chmod +x gradlew
@@ -44,12 +32,6 @@ pipeline {
                    ./gradlew bootJar -Pprod jib -Djib.to.image=bill3213/notification
                    '''
                  }
-               }
-             }
-           }
-           steps {
-             script{
-               withCredentials([string(credentialsId: 'docker_secret', variable: 'docker_secret')]) {
                  dir('product/') {
                    sh '''
                    chmod +x gradlew
